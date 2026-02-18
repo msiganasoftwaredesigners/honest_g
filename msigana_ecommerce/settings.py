@@ -86,10 +86,10 @@ MIDDLEWARE = [mw for mw in MIDDLEWARE if mw]
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'phonest_db',
+        'NAME': 'honestma_phonest_db',
         'HOST': 'localhost',
         'PORT': 3306,
-        'USER': 'honest_user',
+        'USER': 'honestma_honest_user',
         'PASSWORD': 'Honest11#@',
     }
 }
