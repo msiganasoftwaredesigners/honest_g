@@ -1,0 +1,174 @@
+{% load static %}
+{% block content %}
+
+<div class=" mx-auto  z-10">
+    <div class="relative w-full z-10">
+        <div id="map-container" class="z-10"></div>
+    </div>
+</div>
+
+<script>
+    // Check if localStorage has the cached map content
+    var cachedMap = localStorage.getItem('cachedMap');
+
+    // If cachedMap exists, load it; otherwise, load the iframe
+    if (cachedMap) {
+        document.getElementById('map-container').innerHTML = cachedMap;
+    } else {
+        var iframe = document.createElement('iframe');
+        iframe.setAttribute('src', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5612965159294!2d38.73734667575649!3d9.012452189246261!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b8548f75c47ed%3A0x3da1d928fdb75b63!2sHonest%20G!5e0!3m2!1sen!2set!4v1767525794236!5m2!1sen!2set');
+        iframe.setAttribute('width', '100%');
+        iframe.setAttribute('height', '400');
+        iframe.setAttribute('style', 'border:0;');
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.setAttribute('loading', 'lazy');
+        iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+
+        // Append iframe to the map-container
+        document.getElementById('map-container').appendChild(iframe);
+
+        // Cache the iframe content in localStorage
+        localStorage.setItem('cachedMap', iframe.outerHTML);
+    }
+</script>
+
+
+
+
+ <footer class="bg-black text-white py-12">
+    <div class="container mx-auto px-6">
+      <!-- Grid for Columns -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Column 1: Learn Key Technologies -->
+        <div>
+          <h3 class="font-bold text-lg mb-4 yatra_one" style="color: #c6a03e">Honest G</h3>
+        <ul class="space-y-2">
+    <li>
+        <a href="{% url 'home' %}" class="brand-wrap">
+            {% if not footer.footer_company_logo.url %}
+                <p>Please insert footer company logo</p>
+            {% else %}
+                <img class="w-64 h-64 md:h-32 object-contain" 
+                     src="{{ footer.footer_company_logo.url }}" 
+                     alt="logo" />
+            {% endif %}
+        </a>
+    </li>
+</ul>
+
+        </div>
+
+        <!-- Column 2: Essential Skills -->
+        <div>
+          <h3 class="font-bold text-lg mb-4 yatra_one text-orange-600" style="color: #c6a03e">Our Sites</h3>
+          <ul class="space-y-2">
+           
+             {% for site in footer_sites_links %}
+    <li>
+      <a href="{{ site.link }}" class="hover:text-gray-400 text-sm yatra_one">
+        <span style="color: #483C73">
+							<i aria-hidden="true" class="fas fa-angle-right pr-2 text-base"></i>						</span>{{ site.name }}
+      </a>
+    </li>
+  {% empty %}
+ 
+  {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Column 3: Industry Solutions -->
+        <div>
+          <h3 class="font-bold text-lg mb-4 yatra_one" style="color: #c6a03e">Our Services</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-gray-400 text-sm yatra_one"><span style="color: #483C73">
+							<i aria-hidden="true" class="fas fa-angle-right pr-2 text-base"></i>						</span>Selling Property & Consultancy on Buying Property</a></li>
+            <li><a href="#" class="hover:text-gray-400 text-sm yatra_one"><span style="color: #483C73">
+							<i aria-hidden="true" class="fas fa-angle-right pr-2 text-base"></i>						</span>Real Estate Marketing and Sales Consultancy</a></li>
+            <li><a href="#" class="hover:text-gray-400 text-sm yatra_one"><span style="color: #483C73">
+							<i aria-hidden="true" class="fas fa-angle-right pr-2 text-base"></i>						</span>Property and Portfolio Management</a></li>
+            <li><a href="#" class="hover:text-gray-400 text-sm yatra_one"><span style="color: #483C73">
+							<i aria-hidden="true" class="fas fa-angle-right pr-2 text-base"></i>						</span>Project Marketing</a></li>
+            <li><a href="#" class="hover:text-gray-400 text-sm yatra_one"><span style="color: #483C73">
+							<i aria-hidden="true" class="fas fa-angle-right pr-2 text-base"></i>						</span>Joint Development Agreement
+(JDA)</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Community -->
+        <div>
+          <h3 class="font-bold text-lg mb-4 yatra_one"  style="color: #c6a03e">Contact Details</h3>
+          <ul class="space-y-2">
+            <li><a href="mailto:{{footer.email}}" class="hover:text-gray-400 text-sm yatra_one "><i class="fa fa-envelope text-white pr-2 md:pr-3" aria-hidden="true"></i>{{footer.email}}</a></li>
+            <li><a href="tel:{{footer.phone_number}}" class="hover:text-gray-400 text-sm yatra_one"><i class="fa fa-phone text-white pr-2 md:pr-2" aria-hidden="true"></i>                         {{footer.phone_number|slice:":2"}}-{{footer.phone_number|slice:"2:4"}}-{{footer.phone_number|slice:"4:6"}}-{{footer.phone_number|slice:"6:8"}}-{{footer.phone_number|slice:"8:"}}
+</a></li>
+            <li><a href="tel:{{footer.phone_number_two}}" class="hover:text-gray-400 text-sm yatra_one"><i class="fa fa-phone text-white pr-2 md:pr-2" aria-hidden="true"></i>                        {{footer.phone_number_two|slice:":2"}}-{{footer.phone_number_two|slice:"2:4"}}-{{footer.phone_number_two|slice:"4:6"}}-{{footer.phone_number_two|slice:"6:8"}}-{{footer.phone_number_two|slice:"8:"}}
+</a></li>
+            <li><a href="#" class="hover:text-gray-400 text-sm yatra_one me"><i class="fa fa-map-marker text-white pr-2 md:pr-3" aria-hidden="true"></i>Addis Ababa</a></li>
+              <div class="flex space-x-6">
+                    <a href="https://web.facebook.com/profile.php?id=100095697933377&mibextid=wwXIfr&rdid=EyN9yMWZjZONpKGS&share_url=https%3A%2F%2Fweb.facebook.com%2Fshare%2F16fpq9nLoV%2F%3Fmibextid%3DwwXIfr%26_rdc%3D1%26_rdr#" class="hover:text-orange-600 text-white">
+                        <i class="fab fa-facebook-f text-3xl"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@samia_properties?_t=ZM-8xUX1QOmOkq" class="hover:text-orange-600 text-white">
+                        <i class="fab fa-tiktok text-3xl"></i>
+                    </a>
+                    <a href="https://www.instagram.com/samia_homes?igsh=eHo5NnloaW5xZDYx&utm_source=qr" class="hover:text-orange-600 text-white">
+                        <i class="fab fa-instagram text-3xl"></i>
+                    </a>
+                    <a href="https://t.me/samiahomes" class="hover:text-orange-600 text-white">
+    <i class="fab fa-telegram text-3xl"></i>
+</a>
+
+                </div>
+            
+          </ul>
+        </div>
+      </div>
+
+  
+    </div>
+  </footer>
+<div class="bg-orange-900  mb-16 md:mb-0 px-4 md:px-16 lg:px-16 xl:px-48 w-full" style="background: #483c73">
+    <div class="py-4 md:py-4  md:pb-0 w-full">
+        <div class="container flex items-center justify-between">
+            <p class="text-white text-sm md:text-sm me">Copyright &copy; <span class="text-white" id="copyright-year"></span></p>
+            <div class="col-md-8 text-md-center">
+                <span class="px-1 md:px-2 text-sm md:text-sm text-white me">Honest G</span>
+            </div>
+        </div>
+    </div>
+    <div class="py-3 pt-0 md:py-2  md:pt-0w-full">
+        <div class="container flex items-center justify-center">
+            <p class="text-white text-sm md:text-sm me text-center">Design by  <a href="#" clss="ml-4 text-sm">Msigana Technologies</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("copyright-year").innerHTML = new Date().getFullYear();
+</script>
+
+<style>
+    .font-playfair {
+        font-family: 'Playfair Display', serif;
+    }
+    .font-roboto {
+        font-family: 'Roboto', sans-serif;
+    }
+    @media (max-width: 768px) {
+        .text-sm {
+            font-size: 1rem;
+        }
+        .text-base {
+            font-size: 1.25rem;
+        }
+        .text-lg {
+            font-size: 1.5rem;
+        }
+        .text-xl {
+            font-size: 1.75rem;
+        }
+    }
+</style>
+
+
+{% endblock %}

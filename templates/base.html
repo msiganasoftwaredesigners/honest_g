@@ -1,0 +1,175 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="cache-control" content="max-age=604800"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% for content in head_contents %}
+    {{ content.header_meta_data|safe }}
+    {% endfor %}
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+
+
+<!-- General Meta Tags -->
+<title>Honest G | Real Estate for Sale in Addis Ababa, Ethiopia</title>
+<meta name="description" content="Buy your dream home with Honest G. Discover affordable, modern, and secure residential and commercial properties for sale across Ethiopia." />
+<meta name="keywords" content="Honest G, real estate Ethiopia, houses for sale Ethiopia, property for sale Addis Ababa, buy home Ethiopia, real estate agent Ethiopia" />
+<meta name="author" content="Honest G" />
+<meta name="robots" content="index, follow" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#002147" />
+<meta name="msapplication-TileColor" content="#ffffff" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Honest G" />
+<link rel="canonical" href="https://samiahomes.com" />
+
+<!-- Location Meta Tags (update coordinates if needed) -->
+<meta name="geo.region" content="ET-AA" />
+<meta name="geo.placename" content="Addis Ababa" />
+<meta name="geo.position" content="9.03;38.74" />
+<meta name="ICBM" content="9.03, 38.74" />
+
+<!-- Open Graph (OG) Meta Tags -->
+<meta property="og:title" content="Honest G | Buy Property in Addis Ababa and Beyond" />
+<meta property="og:description" content="Looking for real estate in Ethiopia? Honest G offers quality properties for sale in Addis Ababa and across the country. Find your perfect home today!" />
+<meta property="og:image" content="https://samiahomes.com/static/images/logo.png" />
+<meta property="og:url" content="https://samiahomes.com" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_ET" />
+<meta property="og:site_name" content="Honest G" />
+
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="https://www.facebook.com/samiahomes/" />
+<meta property="og:image" content="https://samiahomes.com/static/images/logo.png" />
+<meta property="og:image:alt" content="Honest G Logo" />
+
+<!-- Instagram Meta Tags -->
+<meta property="og:url" content="https://www.instagram.com/samiahomes/" />
+<meta property="og:image" content="https://samiahomes.com/static/images/logo.png" />
+<meta property="og:image:alt" content="Honest G Instagram" />
+
+<!-- TikTok Meta Tags -->
+<meta property="og:url" content="https://www.tiktok.com/@samiahomes" />
+<meta property="og:image" content="https://samiahomes.com/static/images/logo.png" />
+<meta property="og:image:alt" content="Honest G TikTok" />
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "RealEstateAgent",
+  "name": "Honest G",
+  "image": "https://samiahomes.com/static/images/logo.png",
+  "url": "https://samiahomes.com",
+  "telephone": "+251-911223344",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Some Street, Addis Ababa",
+    "addressLocality": "Addis Ababa",
+    "addressRegion": "AA",
+    "postalCode": "1000",
+    "addressCountry": "Ethiopia"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "9.03",
+    "longitude": "38.74"
+  },
+  "openingHours": "Mo-Sa 09:00-18:00",
+  "sameAs": [
+    "https://www.facebook.com/samiahomes/",
+    "https://www.instagram.com/samiahomes/",
+    "https://www.tiktok.com/@samiahomes"
+  ]
+}
+</script>
+
+
+    <link rel="icon" type="image/png" href="{{ favicon.favicon_image.url }}">
+
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery-2.0.0.min.js' %}" type="text/javascript"></script>
+
+
+
+    <script src="{% static 'js/script.js' %}" type="text/javascript"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% comment %} <script src="{% static 'js/wow.min.js' %}"></script> {% endcomment %}
+    <style>
+    
+            .card {
+                opacity: 0;
+                transform: scale(0.5);
+                transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            }
+            .card.visible {
+                opacity: 1;
+                transform: scale(1);
+            }
+            
+    </style>
+
+
+    {% tailwind_css %}
+    <!-- Google tag (gtag.js) -->
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-G5JKHEGP6L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-G5JKHEGP6L');
+</script> 
+<!-- Google tag (gtag.js) -->
+
+
+</head>
+<body>
+{% include 'includes/navbar.html' %}
+{% block content %}
+
+{% endblock %}
+{% include 'includes/footer.html' %}
+ {% include 'includes/topup.html' %} 
+ 
+
+{% for content in head_contents %}
+    {{ content.footer_meta_data|safe }}
+    {% endfor %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const cards = document.querySelectorAll('.card');
+        
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+        
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } else {
+                        entry.target.classList.remove('visible');
+                    }
+                });
+            }, observerOptions);
+        
+            cards.forEach((card, index) => {
+                observer.observe(card);
+            });
+        });
+        </script>
+    </body>
+</html>

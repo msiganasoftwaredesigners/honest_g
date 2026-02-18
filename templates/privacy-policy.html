@@ -1,0 +1,70 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}Privacy Policy{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg overflow-hidden m-4">
+    <article>
+        <h1 class="text-3xl font-semibold mb-4 text-green-600 text-center pt-6">Privacy Policy</h1>
+
+        <section>
+            <h2 class="text-xl md:text-2xl font-semibold mb-2">Privacy Policy of Honest G</h2>
+            <p>
+                Last Updated: June 2025
+            </p>
+            <p>
+                Thank you for visiting <strong>samiahomes.com</strong>, the official website of <strong>Honest G Real Estate</strong>, based in Addis Ababa, Ethiopia. We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy outlines how we collect, use, disclose, and protect your information when you use our website and real estate services.
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold mb-2 pt-6">1. Information We Collect</h2>
+            <p><span class="font-bold">A. Personal Information:</span> When you contact us, submit inquiries, or register interest in a property, we may collect personal information such as your full name, email address, phone number, and preferences regarding property types or budget.</p>
+            <p><span class="font-bold">B. Property Inquiry Details:</span> If you request property information or schedule a visit, we may collect related details like preferred location, budget range, or additional comments.</p>
+            <p><span class="font-bold">C. Usage Data:</span> We may collect information about your device and browsing behavior, including your IP address, browser type, device type, referral source, and visited pages.</p>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold mb-2 pt-6">2. How We Use Your Information</h2>
+            <p>We use the information we collect for the following purposes:</p>
+            <p><span class="font-bold">A. Property Recommendations:</span> To provide tailored property listings based on your interests or submitted inquiries.</p>
+            <p><span class="font-bold">B. Communication:</span> To respond to your inquiries, confirm appointment requests, or share updates on available properties and new developments.</p>
+            <p><span class="font-bold">C. Service Improvement:</span> To analyze user activity and optimize our website and customer experience.</p>
+            <p><span class="font-bold">D. Marketing:</span> With your consent, we may send you newsletters or updates about new property launches or investment opportunities. You can opt out at any time.</p>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold mb-2 pt-6">3. Disclosure of Your Information</h2>
+            <p>We do not sell your personal information. We may share it under these limited circumstances:</p>
+            <p><span class="font-bold">A. Service Providers:</span> With trusted partners who assist us in delivering services (e.g., CRM systems or marketing tools) under confidentiality agreements.</p>
+            <p><span class="font-bold">B. Legal Obligations:</span> If required by law or to comply with legal processes.</p>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold mb-2 pt-6">4. Your Choices</h2>
+            <p><span class="font-bold">A. Access & Correction:</span> You may request access to or correction of your personal data by contacting us.</p>
+            <p><span class="font-bold">B. Marketing Preferences:</span> You can opt out of receiving promotional messages at any time by following the unsubscribe link or contacting us.</p>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold mb-2 pt-6">5. Data Security</h2>
+            <p>We implement reasonable security measures to protect your data. However, no online system is 100% secure, and we encourage you to be cautious when sharing personal information online.</p>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold mb-2 pt-6">6. Policy Updates</h2>
+            <p>This policy may be updated from time to time. All changes will be posted on this page, with an updated "Last Updated" date.</p>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold mb-2 pt-6">7. Contact Us</h2>
+            <p>If you have any questions about this policy or how we handle your information, please contact us at <a href="mailto:{{ footer.email }}">{{ footer.email }}</a>.</p>
+        </section>
+    </article>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 sm:px-0 m-4">
+    <a href="{% url 'home' %}" class="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-200">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+</div>
+{% endblock content %}

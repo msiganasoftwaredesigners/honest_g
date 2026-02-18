@@ -1,0 +1,288 @@
+{% load static %}
+{% load cache %}
+
+<style>
+    /* Styling for the gallery dropdown (existing) */
+    #gallery-dropdown {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0s 0.3s; /* Fade in/out */
+    }
+
+    #gallery-dropdown.block {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease, visibility 0s 0s; /* Fade in */
+    }
+
+    /* Styles for the desktop Projects dropdown */
+    .desktop-projects-dropdown-wrapper {
+        position: relative;
+    }
+
+    .desktop-projects-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;  /* <== changed from 50% */
+    right: 0; /* <== added */
+    margin-left: auto;  /* center using margin */
+    margin-right: auto; /* center using margin */
+    transform: none;    /* remove translate */
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    border-radius: 0.25rem;
+    padding: 0.5rem 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1000;
+    margin-top: 8px;
+}
+
+
+    .desktop-projects-dropdown.show {
+        opacity: 1;
+        visibility: visible;
+        z-index: 1000;
+    }
+
+    .desktop-projects-dropdown a {
+        display: block; /* Make links take full width of dropdown */
+        padding: 0.5rem 1rem; /* px-4 py-2 */
+        color: white;
+        text-align: left; /* Align text to the left */
+        transition: background-color 0.2s ease;
+    }
+
+    .desktop-projects-dropdown a:hover {
+        background-color: rgba(255, 255, 255, 0.1); /* Subtle hover effect */
+        color: #fcd34d; /* yellow-300 or similar for hover */
+    }
+
+    /* Style for the logo text when no image is present (existing) */
+    .brand-wrap p {
+        color: white; /* Ensure text is visible on dark background */
+    }
+
+    /* Rotate arrow on dropdown open */
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+</style>
+ <header class="py-4 shadow-sm tests  absolute w-full z-[9999]" style="background-color: #524d4d; backdrop-filter: blur(5px)">
+    <div class="container flex items-center md:justify-between ">
+        <a href="{% url 'home' %}" class="brand-wrap w-24 mr-2 md:mr-4 md:ml-2 pl-2 ">
+            {% if not footer.nav_company_logo.url %}
+            <p>Honest</p>
+            {% else %}
+            <img src="{{footer.nav_company_logo.url}}" alt="Main page image" />
+            {% endif %}
+        </a>
+
+        <nav class="hidden sm:flex space-x-12 relative z-50">
+            <div class="desktop-projects-dropdown-wrapper" id="desktopProjectsWrapper"> 
+                <a href="#" id="desktopProjectsToggle"
+                    class="text-white text-base 2xl:text-lg hover:text-slate-200 transition volkhov flex items-center">
+                    Projects
+                    <i id="desktopProjectsArrow" class="fas fa-chevron-down text-sm ml-2 transition-transform duration-200"></i>
+                </a>
+            
+      
+<div id="desktopProjectsDropdown" 
+     class="desktop-projects-dropdown p-4 w-[60vw] max-w-[90vw] mx-auto ml-32 left-0 right-0 transform-none z-100">
+
+    
+    <div class="flex flex-wrap justify-center gap-6">
+        {% for category_key, locations in categorized_locations.items %}
+        <div class="w-full md:w-[30%] bg-white/5 rounded-md p-4 border border-white/10 backdrop-blur-md">
+            <h4 class="text-white text-base font-semibold capitalize mb-3 border-b border-gray-500 pb-1">
+                {{ category_key }} 
+            </h4>
+            <ul class="space-y-2">
+                {% for location in locations %}
+                <li>
+                    <a href="{% url 'products_by_location' location=location category=category_key %}" 
+                       class="text-sm text-white hover:text-yellow-400 block px-2 py-1 rounded transition duration-150 hover:bg-white/10 
+                              whitespace-normal break-words">
+                        {{ location }}
+                    </a>
+                </li>
+                {% empty %}
+               
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+            </div>
+
+            <a href="{% url 'about-us' %}"
+                class="text-white text-base 2xl:text-lg hover:text-slate-200 transition volkhov">About Us</a>
+            <a href="{% url 'contact-us' %}"
+                class="text-white text-base 2xl:text-lg hover:text-slate-200 transition volkhov">Contact Us</a>
+            <a href="{% url 'blog' %}"
+                class="text-white text-base 2xl:text-lg hover:text-slate-200 transition volkhov">News</a>
+            <a href="{% url 'gallery' %}"
+                class="text-white text-base 2xl:text-lg hover:text-slate-200 transition volkhov">Photo</a>
+            <a href="{% url 'video-gallery' %}"
+                class="text-white text-base 2xl:text-lg hover:text-slate-200 transition volkhov">Video</a>
+        </nav>
+        <div class="space-x-4 md:space-x-12 flex items-center pl-64 md:pl-0 ">
+            <a href="{% url 'gallery' %}"
+                class="text-sm ml-auto justify-self-end text-white hover:text-yellow-600 transition pl-4 pr-2 volkhov md:hidden">
+                Gallery
+            </a>
+        </div>
+    </div>
+</header>
+
+<div
+    class="fixed w-full border-t border-gray-200 shadow-sm bg-white py-3 bottom-0 left-0 flex justify-items-center items-start lg:hidden z-40 px-2">
+    <a href="javascript:void(0)" class="block text-center text-gray-700 hover:text-primary transition relative pr-3">
+        <div class="text-2xl" id="menuBar">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="text-xs leading-3 volkhov">Menu</div>
+    </a>
+    <a href="{% url 'home' %}" class="pl-32 white">
+        <div class="w-12 h-12 font-bold text-md flex items-center justify-center text-slate-700 pr-1 volkhov">
+            Home
+        </div>
+    </a>
+</div>
+<div class="fixed left-0 top-0 w-full h-full z-50 bg-black bg-opacity-30 shadow hidden" id="mobileMenu">
+    <div class="absolute left-0 top-0 w-48 h-full z-50 bg-black shadow">
+        <div id="closeMenu" class="text-white hover:text-primary text-lg absolute right-3 top-3 cursor-pointer">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="flex flex-col pt-8">
+            <a class="text-base text-white mb-1 pl-4 pt-4 volkhov" href="{% url 'home' %}">Home</a>
+            <div id="projectsDropdownToggle"
+                class="text-base text-white pl-4 pr-4 pt-4 volkhov cursor-pointer flex items-center">
+                <span>Projects</span>
+                <i id="projectsArrow" class="fas fa-chevron-down text-sm ml-2 transition-transform duration-200 text-white"></i>
+            </div>
+
+            <div id="projectsDropdown" class="ml-4 mt-2 hidden space-y-2">
+                <a href="{% url 'new_projects' %}"
+                    class="block bg-orange-700 text-white text-base volkhov pl-1 py-2 rounded  transition duration-200 shadow ">
+                    Office Rent
+                </a>
+                <a href="{% url 'unfinished_projects' %}"
+                    class="block bg-orange-700 text-white text-base volkhov pl-1 py-2 rounded transition duration-200 shadow ">
+                    Rent Your Home
+                </a>
+                <a href="{% url 'finished_projects' %}"
+                    class="block bg-orange-700 text-white text-base volkhov pl-1 py-2 rounded  transition duration-200 shadow">
+                    Buy Your House
+                </a>
+            </div>
+            <script>
+                // Mobile dropdown script (existing)
+                const projectsToggle = document.getElementById('projectsDropdownToggle');
+                const projectsDropdown = document.getElementById('projectsDropdown');
+                const projectsArrow = document.getElementById('projectsArrow');
+
+                if (projectsToggle && projectsDropdown && projectsArrow) { // Check if elements exist before attaching listener
+                    projectsToggle.addEventListener('click', function () {
+                        projectsDropdown.classList.toggle('hidden');
+                        projectsArrow.classList.toggle('rotate-180');
+                    });
+                }
+            </script>
+
+            <a class="text-base text-white mb-1 pl-4 pt-4 volkhov" href="{% url 'gallery' %}">Photo Gallery</a>
+            <a class="text-base text-white mb-1 volkhov pl-4 pt-4" href="{% url 'video-gallery' %}">Video Gallery</a>
+            <a class="text-base text-white mb-1 volkhov pl-4 pt-4" href="{% url 'contact-us' %}">Contact-Us</a>
+            <a class="text-base text-white mb-1 volkhov pl-4 pt-4" href="{% url 'about-us' %}">About Us</a>
+            <a class="text-base text-white mb-1 pl-4 pt-4" href="{% url 'blog' %}">News</a>
+        </div>
+        <script>
+            // Existing category script (if it applies to mobile menu)
+            $(document).ready(function () {
+                $(".category-link:gt(5)").hide();
+                $("#moreButton").click(function () {
+                    $(".category-link").show();
+                    $(this).hide();
+                });
+            });
+        </script>
+    </div>
+</div>
+<script>
+    // General mobile menu toggle script (existing)
+    let menuBar = document.querySelector('#menuBar')
+    let mobileMenu = document.querySelector('#mobileMenu')
+    let closeMenu = document.querySelector('#closeMenu')
+    let sidebar = document.querySelector('#mobileMenu > div')
+
+    if (menuBar && mobileMenu && closeMenu && sidebar) { // Check if elements exist
+        menuBar.addEventListener('click', function () {
+            mobileMenu.classList.remove('hidden')
+        })
+
+        closeMenu.addEventListener('click', function () {
+            mobileMenu.classList.add('hidden')
+        })
+
+        mobileMenu.addEventListener('click', function () {
+            mobileMenu.classList.add('hidden')
+        })
+
+        sidebar.addEventListener('click', function (event) {
+            event.stopPropagation()
+        })
+    }
+
+    // New Desktop Projects Dropdown Script - Combined Click and Hover
+    document.addEventListener('DOMContentLoaded', function() {
+        const desktopProjectsWrapper = document.getElementById('desktopProjectsWrapper');
+        const desktopProjectsToggle = document.getElementById('desktopProjectsToggle');
+        const desktopProjectsDropdown = document.getElementById('desktopProjectsDropdown');
+        const desktopProjectsArrow = document.getElementById('desktopProjectsArrow');
+
+        if (desktopProjectsWrapper && desktopProjectsToggle && desktopProjectsDropdown && desktopProjectsArrow) {
+            let timeoutId;
+
+            const showDropdown = () => {
+                clearTimeout(timeoutId); // Clear any pending hide
+                desktopProjectsDropdown.classList.add('show');
+                desktopProjectsArrow.classList.add('rotate-180');
+            };
+
+            const hideDropdown = () => {
+                // Delay hiding to allow moving mouse from toggle to dropdown
+                timeoutId = setTimeout(() => {
+                    desktopProjectsDropdown.classList.remove('show');
+                    desktopProjectsArrow.classList.remove('rotate-180');
+                }, 200); // 200ms delay
+            };
+
+            // Click functionality
+            desktopProjectsToggle.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default link behavior
+                event.stopPropagation(); // Stop event from bubbling up to document
+                if (desktopProjectsDropdown.classList.contains('show')) {
+                    hideDropdown(); // If already open, click closes it
+                } else {
+                    showDropdown(); // If closed, click opens it
+                }
+            });
+
+            // Hover functionality (mouseenter and mouseleave on the wrapper)
+            desktopProjectsWrapper.addEventListener('mouseenter', showDropdown);
+            desktopProjectsWrapper.addEventListener('mouseleave', hideDropdown);
+            
+            // Keep the document click listener to close if clicking elsewhere
+            document.addEventListener('click', function(event) {
+                if (!desktopProjectsWrapper.contains(event.target)) {
+                    hideDropdown();
+                }
+            });
+        }
+    });
+</script>

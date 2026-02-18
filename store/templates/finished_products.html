@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Showcase of Completed Projects in Addis Ababa{% endblock title %}
+{% block content %}
+<section class="py-10 px-2">
+  <div class="text-center mb-10">
+    <h2 class="text-3xl font-bold text-orange-950 cinzel pt-16">Finished Projects</h2>
+    <p class="text-lg text-gray-600">Explore our completed works</p>
+  </div>
+
+  <div id="product-list" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 xl:mx-8 2xl:mx-12 mb-8">
+    {% for product in products %}
+      <div class="flex flex-col bg-white rounded-xl shadow-md overflow-hidden">
+        <!-- Image -->
+        <a href="{{ product.get_store_url }}" class="relative group">
+          <div class="w-full h-64 overflow-hidden">
+            {% with product.get_main_image as main_image %}
+              {% if main_image %}
+                <img class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105"
+                     src="{{ main_image.image.url }}"
+                     alt="{{ product.product_name }}">
+              {% endif %}
+            {% endwith %}
+          </div>
+        </a>
+
+        <!-- Name & Price Row -->
+        <div class="flex justify-between items-center px-4 py-3 border-t bg-gray-50">
+          <div class="text-gray-900 font-semibold truncate w-1/2">
+            {{ product.product_name|slice:":30"|capfirst }}
+          </div>
+          <div class="text-gray-800 text-sm text-right w-1/2">
+            {% load price_filters %}
+            {{ product.default_price }} Birr
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-span-full text-center text-gray-500">
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Samia Gallery  {% endblock %}
+{% block content %}
+
+<body class="bg-gray-100">
+    <div class="container mx-auto px-2 py-4 md:p-6">
+        <h1 class="text-3xl font-bold text-center mb-6">Photo Gallery of Honest G</h1>
+        <div id="image-gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-1"></div>
+    </div>
+</body>
+<script src="{% static 'js/gallery.js' %}" defer></script>
+
+
+{% endblock content %}
+

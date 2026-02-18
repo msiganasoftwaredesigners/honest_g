@@ -1,0 +1,766 @@
+{% extends 'base.html' %} {% load static %} 
+{% block title %}{{footer.company_main_page_title}}{% endblock %} 
+{% block content %} 
+
+
+<style>
+    /* Custom Inclined Shape (from your original code) */
+    @layer utilities {
+        .custom-inclined {
+            clip-path: polygon(10% 0, 90% 0, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0 90%, 0 10%);
+            border-radius: 0.75rem; /* This is equivalent to rounded-xl in Tailwind */
+        }
+    }
+
+    /* Styles specifically for the home page header to make it transparent */
+    /* This overrides the .bg-black from navbar.html on the home page only */
+    header {
+        position: absolute; /* Position the header absolutely to float above the slideshow */
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: transparent !important; /* Make header background transparent for home page */
+        z-index: 40; /* Ensure header is on top of everything else (slideshow, overlay, content) */
+        box-shadow: none !important; /* Remove shadow if it clashes with transparency */
+    }
+
+    /* Slideshow container setup */
+    .slideshow-full-viewport {
+        position: relative; /* Container for absolute slides and content */
+        width: 100%;
+        min-height: 70vh; /* Full viewport height for larger screens */
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* Align content to the start (after nav) */
+        padding-top: 0px; /* Adjust this to roughly the height of your navigation to push content down */
+    }
+
+    /* Individual slide styling */
+    .slideshow-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        transition: opacity 1s ease-in-out;
+        z-index: 0; /* Behind other content */
+    }
+
+    /* Overlay for the navigation area (this will be directly behind the header) */
+    .nav-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100px; /* Adjust this height to match your navigation bar's height */
+        background: rgba(0, 0, 0, 0.3); /* Semi-transparent black for shadow effect */
+        z-index: 30; /* Above slideshow, below header but above general content */
+    }
+
+    /* Ensure main slideshow content is layered correctly */
+    .slideshow-main-content {
+        position: relative; /* Important for z-index to work */
+        z-index: 20; /* Below nav, below overlay, but above slides */
+        flex-grow: 1; /* Allows content to take remaining space and center vertically */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Center the content vertically within the remaining space */
+        align-items: center;
+    }
+
+    /* Media query for smaller screens */
+    @media (max-width: 1023px) { /* Adjust breakpoint as needed, e.g., lg breakpoint */
+        .slideshow-full-viewport {
+            min-height: 60vh; /* Shorter height for mobile/tablet */
+            padding-top: 70px; /* Adjust for mobile nav height */
+        }
+        .nav-overlay {
+            height: 70px; /* Adjust for mobile navigation height */
+        }
+        /* Mobile menu bar is fixed at the bottom, so no specific adjustment needed here */
+    }
+
+    /* Ensure text in content is white for visibility on slideshow background */
+    .slideshow-main-content p, .slideshow-main-content h1 {
+        color: white;
+    }
+</style>
+
+<div class="slideshow-full-viewport" id="slideshow-container">
+    {% for slide in slides %}
+        <div class="slideshow-slide"
+             style="background-image: url('{{ slide.image.url }}'); {% if not forloop.first %}opacity: 0;{% endif %}">
+        </div>
+    {% endfor %}
+
+    <div class="nav-overlay"></div>
+
+    <div class="container mx-auto px-4 sm:px-8 md:px-16 lg:px-16 xl:px-32 2xl:px-64 slideshow-main-content">
+        <div class="flex flex-col lg:flex-row items-center w-full">
+            <div class=" w-full lg:pr-8 text-center">
+                <h1 class="xl:text-6xl md:text-5xl text-6xl mb-4 text-center card text-[#e49124] hidden" style="font-size:84px;">
+                    <span class="bg-slate-50 bg-opacity-30 px-3 py-2 merienda font-semibold">
+                    
+                    </span>
+                    <br class="hidden sm:block" />
+                </h1>
+                <p class="text-lg text-white leading-relaxed md:ml-8 lg:ml-0 tracking-tighter-custom volkhov">
+                    {{footer.company_description}}
+                </p>
+
+                <div class="mt-12 text-center card">
+                    <a href="{% url 'contact-us' %}"
+                        class=" text-white bg-black border text-3xl lg:text-4xl border-slate-500 px-4 py-3 font-medium rounded-md hover:bg-slate-600 hover:text-primary transition mks" style=" background: #483C73">
+                        Contact us
+                    </a>
+                </div>
+            </div>
+            {% comment %} <div class="lg:w-1/2 w-full mt-8 lg:mt-0 relative">
+                <div class="relative" style="padding-top: 56.25%;">
+                    <div class="absolute inset-0 flex items-center justify-center cursor-pointer">
+                        <i class="fas fa-play text-6xl " style="color: #483C73"></i>
+                    </div>
+                </div>
+            </div> {% endcomment %}
+        </div>
+    </div>
+</div>
+
+{% comment %} <div id="videoModal" class="hidden fixed inset-0 bg-black bg-opacity-75 items-center justify-center z-50">
+    <div class="relative w-full max-w-full sm:max-w-lg md:max-w-4xl lg:max-w-5xl">
+        <div class="relative" style="padding-top: 56.25%;">
+            <iframe id="main-video" class="absolute inset-0 w-full h-full"
+                    src="" title="Video" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        <button id="closeModal" class="absolute top-2 right-2 text-white text-2xl">&times;</button>
+    </div>
+</div>
+
+<script>
+    // Slideshow Script
+    let slides = document.querySelectorAll('.slideshow-slide');
+    let index = 0;
+
+    setInterval(() => {
+        slides[index].style.opacity = '0';
+        index = (index + 1) % slides.length;
+        slides[index].style.opacity = '1';
+    }, 5000); // 5 seconds per slide
+
+    // Video Modal Script
+    $(document).ready(function () {
+        function getVideoUrl() {
+            const width = window.innerWidth;
+            if (width <= 768) {
+                return "{{ mobile_video_url }}";
+            } else if (width <= 1024) {
+                return "{{ tablet_video_url }}";
+            } else {
+                return "{{ desktop_video_url }}";
+            }
+        }
+
+        $('.fa-play').click(function () {
+            const videoUrl = getVideoUrl();
+            $('#main-video').attr('src', videoUrl);
+            $('#videoModal').removeClass('hidden').addClass('flex');
+        });
+
+        $('#closeModal, #videoModal').click(function (event) {
+            if (event.target.id == 'videoModal' || event.target.id == 'closeModal') {
+                $('#videoModal').removeClass('flex').addClass('hidden');
+                var iframe = $('#main-video')[0];
+                iframe.src = "";
+            }
+        });
+    });
+</script> {% endcomment %}
+
+
+
+         <!-- ====== About/chef Section Start -->
+    <section
+    id="about"
+    class="bg-gray-100 px-2 pb-8 pt-20 dark:bg-dark-2 lg:pb-[70px] lg:pt-[120px]2"
+  >
+    <div class="md:mx-16 2xl:mx-32 px-2">
+      <div class="wow fadeInUp" data-wow-delay=".2s">
+        <div class="-mx-4 flex flex-wrap items-center">
+          <div class="w-full px-4 lg:w-1/2">
+            <div class="mb-12 max-w-[540px] lg:mb-0">
+           
+              <h2 class="mb-5 text-[38px] md:text-3xl  leading-tight text-dark dark:text-white sm:text-[40px] sm:leading-[1.2] card cinzel font-semibold">
+          Welcome to Honest G
+              </h2>
+              <p class="mb-10 text-sm md:text-base leading-relaxed text-body-color dark:text-dark-6 card volkhov">
+                Experience elite real estate marketing in Addis Ababa. We partner with 18+ top developers to showcase premium finished homes, modern under-construction units, and exclusive Office Rent. Backed by 20+ professional sales agents, we specialize in high-end residential and commercial properties. For those who seek quality, value, and distinction—we are here.
+              </p>
+      
+             
+      
+            
+            </div>
+          </div>
+      
+          <div class="w-full px-4 lg:w-1/2">
+            <div class="-mx-2 flex flex-wrap sm:-mx-4 lg:-mx-2 xl:-mx-4">
+      
+              <div class="w-full px-2 sm:w-2/3 sm:px-4 lg:px-2 xl:px-4">
+                  <img src="{% static 'images/ones.jpg' %}" alt="Honest G" class="h-64 w-full object-cover object-center" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tailwind CSS Section with Title, Subtitle, and Button -->
+    
+  </section>
+
+
+
+      <div class="md:ml-16 xl:ml-32">
+        <div class="section-heading">
+          <h2
+            class="text-3xl md:text-3xl text-gray-600 uppercase pt-4 mb-4  px-6 md:px-0 font-semibold card cinzel"
+          >
+            Honest G
+          </h2>
+        </div>
+          <!-- product wrapper -->
+          <div id="product-list" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-1 2xl:gap-3 lg:pr-16 xl:pr-32 2xl:pr-32 mb-6 lg:mb-8">
+            {% for product in products %}
+            <a href="{{product.get_store_url}}"  class="flex flex-col card">
+                <div class="m-2 bg-white shadow-md rounded-lg overflow-hidden flex-grow">
+                    <div class="relative group">
+                        <div class="w-full h-[360px] overflow-hidden relative">
+                            {% with product.get_main_image as main_image %}
+                            {% if main_image %}
+                                <img class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-110" src="{{ main_image.image.url }}" alt="{{ product.product_name }}">
+                               
+                            {% endif %}
+                            {% endwith %}
+                        </div>
+                      </div>
+                      {% comment %} style="background-color: #c6a03e" {% endcomment %}
+                      
+                    <div class="text-white text-center py-2 pb-0  bg-black" style=" background: #483C73">
+                        <div class="  font-semibold w-full inline-block mks">{{ product.product_name|capfirst }}</div>
+                    </div>
+                    <div class="text-center text-white pt-0 pb-2 rounded-b bg-black leading-tight" style=" background: #483C73">
+
+                        <div class="font-semibold w-full inline-block mks">Location: {{ product.product_location|capfirst }}</div>
+                    </div>
+                </div>
+              </a>
+            {% endfor %}
+        </div>
+        
+    
+      </div>
+      
+  <!-- ====== About/chef Section End -->
+  <div class=" flex flex-col md:flex-row text-white py-20" style="background: #483C73">
+    <div class="flex-1 flex flex-col items-center justify-center text-center mb-24 md:mb-0">
+      <h2 class="text-3xl md:text-3xl font-semibold mb-6 card capitalize">Office Rent</h2>
+  
+      <a href="{% url 'new_projects' %}" class="bg-white text-blue-950 font-semibold py-2 px-4 rounded-md mks">
+        View Detail
+      </a>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center text-center mb-24 md:mb-0">
+   <h2 class="text-3xl md:text-3xl font-semibold mb-6 card  capitalize">Ongoing Projects</h2>
+   <a href="{% url 'unfinished_projects' %}" class="bg-white text-blue-950 font-semibold py-2 px-4 rounded-md mks">
+     View Detail
+   </a>
+ </div>
+    <div class="flex-1 flex flex-col items-center justify-center text-center  md:mb-0">
+      <h2 class="text-3xl md:text-3xl font-semibold mb-6 card capitalize">Finished Projects</h2>
+      <a href="{% url 'finished_projects' %}" class="bg-white text-blue-950 font-semibold py-2 px-4 rounded-md mks">
+        View  Detail
+      </a>
+    </div>
+  </div>
+  
+  
+
+    </section>
+    
+    
+    
+     <!-- ====== Testimonial Section Start -->
+     <section
+     id="testimonials"
+     class="overflow-hidden bg-gray-100 py-20 dark:bg-dark-2 md:py-[70px] px-2"
+   >
+     <div class="container mx-auto px-2">
+       <div class="-mx-4 flex flex-wrap justify-center">
+         <div class="w-full px-4">
+           <div class="mx-auto mb-[60px] max-w-[485px] text-center">
+             <h2
+               class="mb-3 text-3xl font-bold leading-[1.2] text-dark dark:text-white sm:text-4xl md:text-[34px] card cinzel"
+             >
+               What our Customers Say
+           </h2>
+           </div>
+         </div>
+       </div>
+
+       <div class="-m-5">
+         <div class="swiper testimonial-carousel common-carousel p-5">
+           <div class="swiper-wrapper">
+             <div class="swiper-slide card">
+               <div
+                 class="rounded-xl bg-white px-4 py-[30px] shadow-testimonial dark:bg-dark sm:px-[30px]"
+               >
+                 <div class="mb-[18px] flex items-center gap-[2px]">
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                 </div>
+
+                 <p class="mb-6 text-base text-body-color dark:text-dark-6 volkhov ">
+                   “Working with this real estate agency was a game-changer! They helped me find the perfect home within my budget and made the entire buying process smooth and stress-free.’’
+                 </p>
+
+                 <a href="#" class="flex items-center gap-4">
+                   <div class="h-[50px] w-[50px] overflow-hidden rounded-full">
+                     <img
+                       src="{% static 'images/human.jpg' %}"
+                       alt="author"
+                       class="h-[50px] w-[50px] overflow-hidden rounded-full"
+                     />
+                   </div>
+
+                   <div>
+                     <h3
+                       class="text-sm font-semibold text-dark dark:text-white me"
+                     >
+                       Mahlet Teshome
+                     </h3>
+                   </div>
+                 </a>
+               </div>
+             </div>
+
+             <div class="swiper-slide  card">
+               <div
+                 class="rounded-xl bg-white px-4 py-[30px] shadow-testimonial dark:bg-dark sm:px-[30px]"
+               >
+                 <div class="mb-[18px] flex items-center gap-[2px]">
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                 </div>
+
+                 <p class="mb-6 text-base text-body-color dark:text-dark-6 volkhov ">
+                   “I recently sold my property through this team and was impressed by their professionalism and market knowledge. The sale was fast and above my asking price!’’
+                 </p>
+
+                 <a href="#" class="flex items-center gap-4">
+                   <div class="h-[50px] w-[50px] overflow-hidden rounded-full">
+                     <img
+                       src="{% static 'images/human.jpg' %}"
+                       alt="author"
+                       class="h-[50px] w-[50px] overflow-hidden rounded-full"
+                     />
+                   </div>
+
+                   <div>
+                     <h3
+                       class="text-sm font-semibold text-dark dark:text-white me"
+                     >
+                       Keidr Jemal
+                     </h3>
+                   </div>
+                 </a>
+               </div>
+             </div>
+
+             <div class="swiper-slide card">
+               <div
+                 class="rounded-xl bg-white px-4 py-[30px] shadow-testimonial dark:bg-dark sm:px-[30px]"
+               >
+                 <div class="mb-[18px] flex items-center gap-[2px]">
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                 </div>
+
+                 <p class="mb-6 text-base text-body-color dark:text-dark-6 volkhov ">
+                   “Their team guided me every step of the way during my first rental experience. The property was exactly as described, and the location is ideal for my work and lifestyle.’’
+                 </p>
+
+                 <a href="#" class="flex items-center gap-4">
+                   <div class="h-[50px] w-[50px] overflow-hidden rounded-full">
+                     <img
+                       src="{% static 'images/human.jpg' %}"
+                       alt="author"
+                       class="h-[50px] w-[50px] overflow-hidden rounded-full"
+                     />
+                   </div>
+
+                   <div>
+                     <h3 class="text-sm font-semibold text-dark dark:text-white me">
+                      Leonor cid
+                     </h3>
+                    
+                   </div>
+                 </a>
+               </div>
+             </div>
+
+             <div class="swiper-slide">
+               <div
+                 class="rounded-xl bg-white px-4 py-[30px] shadow-testimonial dark:bg-dark sm:px-[30px]"
+               >
+                 <div class="mb-[18px] flex items-center gap-[2px]">
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                 </div>
+
+                 <p class="mb-6 text-base text-body-color dark:text-dark-6 volkhov ">
+                   “This agency went above and beyond to help me find an investment property. They knew the market well and gave me honest advice. I’m already seeing great returns!’’
+                 </p>
+
+                 <a href="#" class="flex items-center gap-4">
+                   <div class="h-[50px] w-[50px] overflow-hidden rounded-full">
+                     <img
+                       src="{% static 'images/human.jpg' %}"
+                       alt="author"
+                       class="h-[50px] w-[50px] overflow-hidden rounded-full"
+                     />
+                   </div>
+
+                   <div>
+                     <h3
+                       class="text-sm font-semibold text-dark dark:text-white me"
+                     >
+                       Sabo Masties
+                   </h3>
+                   </div>
+                 </a>
+               </div>
+             </div>
+
+             <div class="swiper-slide">
+               <div
+                 class="rounded-xl bg-white px-4 py-[30px] shadow-testimonial dark:bg-dark sm:px-[30px]"
+               >
+                 <div class="mb-[18px] flex items-center gap-[2px]">
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                 </div>
+
+                 <p class="mb-6 text-base text-body-color dark:text-dark-6 volkhov ">
+                   “From start to finish, the experience was top-notch. They made sure I understood every detail of the lease agreement and helped me move in without any issues.’’
+                 </p>
+
+                 <a href="#" class="flex items-center gap-4">
+                   <div class="h-[50px] w-[50px] overflow-hidden rounded-full">
+                     <img
+                       src="{% static 'images/human.jpg' %}"
+                       alt="author"
+                       class="h-[50px] w-[50px] overflow-hidden rounded-full"
+                     />
+                   </div>
+
+                   <div>
+                     <h3
+                       class="text-sm font-semibold text-dark dark:text-white me"
+                     >
+                       Musharof Chowdhury
+                     </h3>
+                   </div>
+                 </a>
+               </div>
+             </div>
+
+             <div class="swiper-slide">
+               <div
+                 class="rounded-xl bg-white px-4 py-[30px] shadow-testimonial dark:bg-dark sm:px-[30px]"
+               >
+                 <div class="mb-[18px] flex items-center gap-[2px]">
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                   <img
+                     src="{% static 'images/testimonials/icon-star.svg' %}"
+                     alt="star icon"
+                   />
+                 </div>
+
+                 <p class="mb-6 text-base text-body-color dark:text-dark-6 volkhov">
+                   “If you’re looking for trustworthy, dedicated real estate professionals, look no further. Their team turned what I thought would be a stressful process into a smooth journey.’’
+                 </p>
+
+                 <a href="#" class="flex items-center gap-4">
+                   <div class="h-[50px] w-[50px] overflow-hidden rounded-full">
+                     <img
+                       src="{% static 'images/human.jpg' %}"
+                       alt="author"
+                       class="h-[50px] w-[50px] overflow-hidden rounded-full"
+                     />
+                   </div>
+
+                   <div>
+                     <h3
+                       class="text-sm font-semibold text-dark dark:text-white me"
+                     >
+                       William Smith
+                     </h3>
+                   </div>
+                 </a>
+               </div>
+             </div>
+           </div>
+
+           <div class="pt-8 flex items-center justify-center gap-1">
+             <div class="swipe-prev pl-40 md:pl-[430px] 2xl:pl-[550px] pr-3">
+              <i class="fa fa-arrow-circle-left text-orange-900 text-5xl" style="color: #483C73" aria-hidden="true"></i>
+             </div>
+
+             <div class="swipe-next pr-48 md:pr-[430px] 2xl-[550px]">
+              <i class="fa fa-arrow-circle-right  text-5xl " style="color: #483C73" aria-hidden="true"></i>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+     </div>
+     </div>
+     </section>
+      <!-- ====== Testimonial Section End -->
+ 
+      <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+       <script src="{% static 'js/main.js' %}"></script> 
+      <script>
+        // ==== for menu scroll
+        const pageLink = document.querySelectorAll(".ud-menu-scroll");
+  
+        pageLink.forEach((elem) => {
+          elem.addEventListener("click", (e) => {
+            e.preventDefault();
+            document.querySelector(elem.getAttribute("href")).scrollIntoView({
+              behavior: "smooth",
+              offsetTop: 1 - 60,
+            });
+          });
+        });
+  
+        // section menu active
+        function onScroll(event) {
+          const sections = document.querySelectorAll(".ud-menu-scroll");
+          const scrollPos =
+            window.pageYOffset ||
+            document.documentElement.scrollTop ||
+            document.body.scrollTop;
+  
+          for (let i = 0; i < sections.length; i++) {
+            const currLink = sections[i];
+            const val = currLink.getAttribute("href");
+            const refElement = document.querySelector(val);
+            const scrollTopMinus = scrollPos + 73;
+            if (
+              refElement.offsetTop <= scrollTopMinus &&
+              refElement.offsetTop + refElement.offsetHeight > scrollTopMinus
+            ) {
+              document
+                .querySelector(".ud-menu-scroll")
+                .classList.remove("active");
+              currLink.classList.add("active");
+            } else {
+              currLink.classList.remove("active");
+            }
+          }
+        }
+  
+        window.document.addEventListener("scroll", onScroll);
+  
+        // Testimonial
+        const testimonialSwiper = new Swiper(".testimonial-carousel", {
+          slidesPerView: 1,
+          spaceBetween: 30,
+  
+          // Navigation arrows
+          navigation: {
+            nextEl: ".swipe-next",
+            prevEl: ".swipe-prev",
+          },
+  
+          breakpoints: {
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 30,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            },
+            1280: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            },
+          },
+        });
+      </script>
+  
+      <script>
+        let page = 2; 
+        let isLoading = false; 
+        
+        window.onscroll = function (ev) {
+          if (!isLoading && window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            isLoading = true; 
+        
+            fetch(`/store?page=${page}`)
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                return response.json();
+              })
+              .then((data) => {
+                if (data.end) {
+                  window.onscroll = null; // remove the event handler when there are no more products
+                } else {
+                  data.products.forEach((product) => {
+                    // create a new product card
+                    let card = document.createElement("div");
+                    card.className = "flex flex-col";
+                    card.innerHTML = `
+                      <div class="m-2 bg-white shadow-md rounded-lg overflow-hidden flex-grow">
+                        <a href="${product.get_store_url}">
+                          <div class="w-full sm:h-32 md:h-64 overflow-hidden">
+                            <img class="w-full h-full object-cover" src="${product.product_images}" alt="${product.product_name}">
+                          </div>
+                        </a>
+                        <div class="sm:p-3 md:p-6">
+                          <a href="${product.get_store_url}" class="block text-lg font-semibold text-gray-800 hover:text-blue-600">${product.product_name}</a>
+                          <div class="my-2 md:my-4 text-blue-600 md:text-2xl">${product.product_price} birr</div>
+                        </div>
+                      </div>
+                    `;
+                    // append the new product card to the product list
+                    document.querySelector("#product-list").appendChild(card);
+                  });
+                  page++;
+                }
+              })
+              .catch((error) => {
+                console.error("There has been a problem with your fetch operation:", error);
+              })
+              .finally(() => {
+                isLoading = false; // set the flag back to false when the request is complete
+              });
+          }
+        };
+        
+      </script>
+{% endblock %}

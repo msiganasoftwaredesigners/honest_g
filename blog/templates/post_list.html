@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Ethiopian Real Estate News
+{% endblock %}
+{% block content %}
+<section class="pb-12  bg-gray-100 pt-96 " style="padding-top: 180px;">
+    <h2 class="text-3xl  font-bold text-center text-blue-950 mb-8">Latest Blog Posts</h2>
+    <div id="blog-gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
+      <!-- Blog posts will be injected here by JS -->
+    </div>
+  </div>
+</section>
+  <div class="max-w-6xl mx-auto px-4 sm:px-0 m-4">
+        <a href="{% url 'home' %}" class="inline-block text-white  px-4 py-2 rounded  transition-colors duration-200"  style="background: #C6A03E ">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+    </div>
+<script src="{% static 'js/blog.js' %}"></script>  <!-- Ensure this path is correct -->
+{% endblock %}

@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% load static %} 
+{% block content %}
+<style>
+    /* Custom Inclined Shape (from your original code) */
+    @layer utilities {
+        .custom-inclined {
+            clip-path: polygon(10% 0, 90% 0, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0 90%, 0 10%);
+            border-radius: 0.75rem; /* This is equivalent to rounded-xl in Tailwind */
+        }
+    }
+
+    /* Styles specifically for the home page header to make it transparent */
+    /* This overrides the .bg-black from navbar.html on the home page only */
+    header {
+        position: absolute; /* Position the header absolutely to float above the slideshow */
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: transparent !important; /* Make header background transparent for home page */
+        z-index: 40; /* Ensure header is on top of everything else (slideshow, overlay, content) */
+        box-shadow: none !important; /* Remove shadow if it clashes with transparency */
+    }
+
+    /* Slideshow container setup */
+    .slideshow-full-viewport {
+        position: relative; /* Container for absolute slides and content */
+        width: 100%;
+        min-height: 70vh; /* Full viewport height for larger screens */
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* Align content to the start (after nav) */
+        padding-top: 100px; /* Adjust this to roughly the height of your navigation to push content down */
+    }
+
+    /* Individual slide styling */
+    .slideshow-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        transition: opacity 1s ease-in-out;
+        z-index: 0; /* Behind other content */
+    }
+
+    /* Overlay for the navigation area (this will be directly behind the header) */
+    .nav-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100px; /* Adjust this height to match your navigation bar's height */
+        background: rgba(0, 0, 0, 0.3); /* Semi-transparent black for shadow effect */
+        z-index: 30; /* Above slideshow, below header but above general content */
+    }
+
+    /* Ensure main slideshow content is layered correctly */
+    .slideshow-main-content {
+        position: relative; /* Important for z-index to work */
+        z-index: 20; /* Below nav, below overlay, but above slides */
+        flex-grow: 1; /* Allows content to take remaining space and center vertically */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Center the content vertically within the remaining space */
+        align-items: center;
+    }
+
+    /* Media query for smaller screens */
+    @media (max-width: 1023px) { /* Adjust breakpoint as needed, e.g., lg breakpoint */
+        .slideshow-full-viewport {
+            min-height: 60vh; /* Shorter height for mobile/tablet */
+            padding-top: 70px; /* Adjust for mobile nav height */
+        }
+        .nav-overlay {
+            height: 70px; /* Adjust for mobile navigation height */
+        }
+        /* Mobile menu bar is fixed at the bottom, so no specific adjustment needed here */
+    }
+
+    /* Ensure text in content is white for visibility on slideshow background */
+    .slideshow-main-content p, .slideshow-main-content h1 {
+        color: white;
+    }
+</style>
+<div class="slideshow-full-viewport" id="slideshow-container">
+    {% for slide in slides %}
+        <div class="slideshow-slide"
+             style="background-image: url('{{ slide.image.url }}'); {% if not forloop.first %}opacity: 0;{% endif %}">
+        </div>
+    {% endfor %}
+
+
+<div class="nav-overlay"></div>
+
+    <div class="container mx-auto px-4 sm:px-8 md:px-16 lg:px-16 xl:px-32 2xl:px-64 slideshow-main-content">
+        <div class="flex flex-col lg:flex-row items-center w-full">
+            <div class="lg:w-1/2 w-full lg:pr-8 text-center">
+                <h1 class="xl:text-6xl md:text-5xl text-6xl mb-4 text-center card text-[#e49124] hidden" style="font-size:84px;">
+                    <span class="bg-slate-50 bg-opacity-30 px-3 py-2 merienda font-semibold">
+        
+                    </span>
+                    <br class="hidden sm:block" />
+                </h1>
+                {% comment %} <p class="bg-black border text-lg px-4 py-3 leading-relaxed md:ml-8 lg:ml-0 tracking-tighter-custom volkhov" style="color: #c6a03e">
+                    Products in {{ location|capfirst }}
+                </p> {% endcomment %}
+                <p class="bg-black border text-lg px-4 py-3 leading-relaxed md:ml-8 lg:ml-0 tracking-tighter-custom volkhov arrow-button" style="color: #c6a03e">
+     {{ location|capfirst }}
+</p>
+
+<style>
+    .arrow-button {
+        position: relative; /* Needed for absolute positioning of the arrow */
+        padding-right: 30px; /* Make space for the arrow */
+        display: inline-block; /* Allows padding and positioning to work correctly */
+    }
+
+    .arrow-button::after {
+        content: '→'; /* Unicode for a right arrow, or use '\2192' */
+        position: absolute;
+        right: 10px; /* Adjust as needed */
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.2em; /* Adjust arrow size */
+        color: #c6a03e; /* Match button text color */
+    }
+</style>
+            </div>
+            <div class="lg:w-1/2 w-full mt-8 lg:mt-0 relative">
+                <div class="relative" style="padding-top: 56.25%;">
+                   <div class="absolute inset-0 flex items-center justify-center cursor-pointer video-play-trigger">
+    <i class="fas fa-play text-6xl text-white"></i>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="videoModal" class="hidden fixed inset-0 bg-black bg-opacity-75 items-center justify-center z-50">
+    <div class="relative w-full max-w-full sm:max-w-lg md:max-w-4xl lg:max-w-5xl">
+        <div class="relative" style="padding-top: 56.25%;">
+            <iframe id="main-video" class="absolute inset-0 w-full h-full"
+                    src="" title="Video" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        <button id="closeModal" class="absolute top-2 right-2 text-white text-2xl">&times;</button>
+    </div>
+</div>
+
+
+<script>
+    // Slideshow Script
+    let slides = document.querySelectorAll('.slideshow-slide');
+    let index = 0;
+
+    setInterval(() => {
+        slides[index].style.opacity = '0';
+        index = (index + 1) % slides.length;
+        slides[index].style.opacity = '1';
+    }, 5000); // 5 seconds per slide
+
+     // Video Modal Script
+    $(document).ready(function () {
+        function getVideoUrl() {
+            const width = window.innerWidth;
+            if (width <= 768) {
+                return "{{ mobile_video_url|escapejs }}";
+            } else if (width <= 1024) {
+                return "{{ tablet_video_url|escapejs }}";
+            } else {
+                return "{{ desktop_video_url|escapejs }}";
+            }
+        }
+
+        $('.video-play-trigger').click(function () {
+            const videoUrl = getVideoUrl();
+            console.log("Playing video URL:", videoUrl);
+            $('#main-video').attr('src', videoUrl);
+            $('#videoModal').removeClass('hidden').addClass('flex');
+        });
+
+        $('#closeModal, #videoModal').click(function (event) {
+            if (event.target.id == 'videoModal' || event.target.id == 'closeModal') {
+                $('#videoModal').removeClass('flex').addClass('hidden');
+                var iframe = $('#main-video')[0];
+                iframe.src = "";
+            }
+        });
+    });
+</script>
+
+
+  {% if products %}
+    <div id="product-list" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-1 2xl:gap-3 lg:pr-16 xl:pr-32 2xl:pr-32 mb-6 lg:mb-8">
+      {% for product in products %}
+        <a href="{{ product.get_store_url }}" class="flex flex-col card">
+          <div class="m-2 bg-white shadow-md rounded-lg overflow-hidden flex-grow">
+            <div class="relative group">
+              <div class="w-full h-[360px] overflow-hidden relative">
+                {% with product.get_main_image as main_image %}
+                  {% if main_image %}
+                    <img class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-110"
+                         src="{{ main_image.image.url }}"
+                         alt="{{ product.product_name }}">
+                  {% endif %}
+                {% endwith %}
+              </div>
+            </div>
+            <div class="bg-black text-center py-2" style="color: #c6a03e">
+              <div class=" font-semibold w-full inline-block">{{ product.product_name|capfirst }}</div>
+            </div>
+            <div class="text-center bg-black  py-2 rounded-b" style="color: #c6a03e" >
+              <div class=" font-semibold w-full inline-block">Location: {{ product.product_location|capfirst }}</div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-center text-gray-500">No products found in {{ location|capfirst }}.</p>
+  {% endif %}
+{% endblock %}

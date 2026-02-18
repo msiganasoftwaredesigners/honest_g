@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Honest G Video Gallery {% endblock %}
+{% block content %}
+
+<head>
+    <style>
+        /* Basic styling for the video gallery */
+        body {
+            
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Title styling */
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin: 2rem 0;
+        }
+
+        /* Video gallery container */
+        #video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Adjust grid for responsiveness */
+            gap: 1rem;
+            padding: 0 2rem; /* Default padding for larger screens */
+            margin: 0 auto;
+            max-width: 1200px; /* Optional: Set a max width to prevent videos from getting too wide on large screens */
+        }
+
+        /* Style for each video iframe */
+        #video-gallery iframe,
+        #video-gallery video {
+            width: 100%;
+            height: 250px; /* Set a fixed height to ensure videos are equal size */
+            border: none;
+            object-fit: cover; /* Ensure the videos cover the space proportionally */
+            border-radius: 8px; /* Optional: Adds rounded corners */
+        }
+
+        /* Optional: Add hover effect on the video container for a nicer UI */
+        #video-gallery iframe:hover,
+        #video-gallery video:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            #video-gallery {
+                padding: 0 1rem; /* Reduce padding on mobile */
+            }
+
+            /* Adjust grid layout for smaller screens */
+            #video-gallery {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Increase card width on smaller devices */
+            }
+
+            /* Optional: Adjust the height for videos on smaller screens */
+            #video-gallery iframe,
+            #video-gallery video {
+                height: 200px; /* Adjust height for mobile */
+            }
+        }
+
+        /* Extra small screen adjustments */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem; /* Smaller title font size on small screens */
+            }
+
+            /* Adjust video height further for small screens */
+            #video-gallery iframe,
+            #video-gallery video {
+                height: 180px; /* Further decrease video height on very small screens */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="text-blue-950">Video Gallery</h1>
+
+    <!-- Video gallery container -->
+    <section id="video-gallery"></section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let page = 1;
+            let loading = false;
+            let lastPage = false; // Flag to stop loading when the last page is reached
+
+            function loadVideos() {
+                if (loading || lastPage) return;
+                loading = true;
+
+                fetch(`/video-gallery/api/videos/?page=${page}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.results.length === 0) {
+                            lastPage = true; // Mark as last page if no videos are returned
+                            return;
+                        }
+
+                        const container = document.getElementById("video-gallery");
+
+                        // Loop through each video data and add them to the container
+                        data.results.forEach((video) => {
+                            let videoElement;
+
+                            if (video.youtube_embed) {
+                                // For YouTube video
+                                videoElement = document.createElement("iframe");
+                                videoElement.className = "video-frame"; // Class for styling
+                                videoElement.src = video.youtube_embed;
+                                videoElement.frameBorder = "0";
+                                videoElement.allowFullscreen = true;
+                            } else if (video.video_file_url) {
+                                // For local video file
+                                videoElement = document.createElement("video");
+                                videoElement.className = "video-frame"; // Class for styling
+                                videoElement.controls = true;
+                                videoElement.src = video.video_file_url;
+                            }
+
+                            // Append the video element to the video-gallery container
+                            container.appendChild(videoElement);
+                        });
+
+                        page++; // Increment page number for the next fetch
+                        loading = false;
+                    })
+                    .catch(() => {
+                        loading = false;
+                    });
+            }
+
+            // Load initial videos
+            loadVideos();
+
+            // Infinite scrolling
+            window.addEventListener("scroll", function () {
+                if (
+                    window.innerHeight + window.scrollY >= document.body.offsetHeight - 150 &&
+                    !lastPage // Only load more if it's not the last page
+                ) {
+                    loadVideos();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+{% endblock content %}
