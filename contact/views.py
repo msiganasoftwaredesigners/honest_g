@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from .forms import FormWithCaptcha
 import requests
-
+from msigana_ecommerce.settings import RECAPTCHA_PUBLIC_KEY
 
 
 def contact_us(request):
@@ -70,7 +70,7 @@ def contact_us(request):
         return redirect('contact-us')
 
     context = {
-        "RECAPTCHA_PUBLIC_KEY": base.RECAPTCHA_PUBLIC_KEY, 
+        "RECAPTCHA_PUBLIC_KEY": RECAPTCHA_PUBLIC_KEY, 
         "captcha": FormWithCaptcha
     }
     return render(request, 'contact-us.html', context)

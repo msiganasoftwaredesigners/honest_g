@@ -1,9 +1,9 @@
 import os
 from pathlib import Path
 from decouple import config
-import pymysql
+# import pymysql
 
-pymysql.install_as_MySQLdb()
+# pymysql.install_as_MySQLdb()
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -97,6 +97,19 @@ DATABASES = {
         'PASSWORD': 'Honest11#@',
     }
 }
+
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'honest_db',
+#         'HOST': 'localhost',
+#         'PORT': 3306,
+#         'USER': 'honest_user',
+#         'PASSWORD': 'Honest11#@',
+#     }
+# }
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
@@ -227,11 +240,14 @@ CORS_ALLOW_ALL_ORIGINS = not DEBUG
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.romefurnitures.com' 
+EMAIL_HOST = 'mail.honestgt.com' 
 EMAIL_PORT = 465  
 EMAIL_USE_SSL = True  
 EMAIL_USE_TLS = False  
-EMAIL_HOST_USER = 'info@romefurnitures.com'  
-EMAIL_HOST_PASSWORD = 'RomeFurnitures11@#'  
-DEFAULT_FROM_EMAIL = 'info@romefurnitures.com'  
-ADMIN_EMAIL = 'info@romefurnitures.com'  
+EMAIL_HOST_USER = 'info@honestgt.com'  
+EMAIL_HOST_PASSWORD = 'Honestgt11@#'  
+DEFAULT_FROM_EMAIL = 'info@honestgt.com'  
+ADMIN_EMAIL = 'info@honestgt.com'  
+
+
+RECAPTCHA_PUBLIC_KEY='hsfjksdhf78s5kdjf8r53nth895ghn54'
