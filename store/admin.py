@@ -115,3 +115,4 @@ admin_site.register(Product, ProductAdmin)
 admin_site.register(Size, SizeAdmin)
 admin_site.register(SitesShowFooter, SitesShowFooterAdmin)
 
+

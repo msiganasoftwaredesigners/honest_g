@@ -11,7 +11,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
     def email_login_link(self, obj=None):
         return format_html(
             '<a href="{}" target="_blank" style="color: green; font-weight: bold;">Email Login</a>',
-            'https://s1478.lon1.mysecurecloudhost.com:2096/'
+            'https://honestgt.com:2096/cpsess0394391820/3rdparty/roundcube/?_task=mail&_mbox=INBOX'
         )
     email_login_link.short_description = 'Email Login'  # Display name in admin
 

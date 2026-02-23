@@ -8,11 +8,11 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'category_slug': ('category_name',)}
     list_display = ('category_name', 'category_slug')
 
-    def has_delete_permission(self, request, obj=None):
-        return False
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
     
-    def has_add_permission(self, request, obj=None):
-        return False
+    # def has_add_permission(self, request, obj=None):
+    #     return False
 
 
 admin_site.register(Category, CategoryAdmin)
