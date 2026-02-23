@@ -6,8 +6,8 @@ from django.http import Http404
 
 
 class AdminSite(DjangoAdminSite):
-    site_header = 'Samia Login'
-    site_title = 'Samia Admin'
+    site_header = 'Honest g Login'
+    site_title = 'Honest g Admin'
 
     def each_context(self, request):
         context = super().each_context(request)
