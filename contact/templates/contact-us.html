@@ -2,8 +2,6 @@
 {% load static %}
 {% block title %}Contact us{% endblock %}
 {% block content %}
-
-
          <!-- ====== Testimonial Section End -->
          <section id="contact" class="relative py-10 md:py-[100px] " style="padding-top: 180px;">
         <h1 class=" text-5xl text-white text-center pb-6 ">Contact Us</h1>
@@ -240,4 +238,37 @@
         });
     });
 </script>
+
+<div class=" mx-auto  z-10">
+    <div class="relative w-full z-10">
+        <div id="map-container" class="z-10"></div>
+    </div>
+</div>
+
+<script>
+    // Check if localStorage has the cached map content
+    var cachedMap = localStorage.getItem('cachedMap');
+
+    // If cachedMap exists, load it; otherwise, load the iframe
+    if (cachedMap) {
+        document.getElementById('map-container').innerHTML = cachedMap;
+    } else {
+        var iframe = document.createElement('iframe');
+        iframe.setAttribute('src', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5612965159294!2d38.73734667575649!3d9.012452189246261!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b8548f75c47ed%3A0x3da1d928fdb75b63!2sHonest%20G!5e0!3m2!1sen!2set!4v1767525794236!5m2!1sen!2set');
+        iframe.setAttribute('width', '100%');
+        iframe.setAttribute('height', '400');
+        iframe.setAttribute('style', 'border:0;');
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.setAttribute('loading', 'lazy');
+        iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+
+        // Append iframe to the map-container
+        document.getElementById('map-container').appendChild(iframe);
+
+        // Cache the iframe content in localStorage
+        localStorage.setItem('cachedMap', iframe.outerHTML);
+    }
+</script>
+
+
 {% endblock %}

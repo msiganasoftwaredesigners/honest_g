@@ -4,9 +4,10 @@ from .views import finished_products_view, unfinished_products_view, new_product
 
 
 urlpatterns = [
-    path('projects/finished/', finished_products_view, name='finished_projects'),
-    path('projects/unfinished/', unfinished_products_view, name='unfinished_projects'),
-    path('projects/new/', new_products_view, name='new_projects'),
+    path('projects/finished/', finished_products_view, name='finished_products'),
+    path('projects/unfinished/', unfinished_products_view, name='unfinished_products'),
+    path('projects/new/', new_products_view, name='new_products'),
+    path('projects/<str:category>/<str:location>/', views.products_by_location, name='products_by_location'),
     path('filter_products/', views.filter_products, name='filter_products'),
     path('increment-view-count/<slug:product_slug>/', views.increment_view_count, name='increment_view_count'),
     path('rate_product/<str:product_slug>/', views.rate_product, name='rate_product'),

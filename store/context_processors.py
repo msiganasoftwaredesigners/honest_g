@@ -63,9 +63,9 @@ def categorized_locations(request):
     from .models import Product
 
     category_map = {
-        'Office Rent': 'Office Rent',
-        'Rent Your Home': 'Rent Your Home',
-        'Buy Your House': 'Buy Your House',
+        'New Projects': 'new',
+        'Unfinished Projects': 'unfinished',
+        'Finished Projects': 'finished',
     }
 
     categorized = {}

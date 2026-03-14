@@ -246,19 +246,19 @@ def search(request):
 
 def finished_products_view(request):
     products = Product.objects.filter(
-        category__category_name__iexact="finished"
+        category__category_name__iexact="residential_rentals"
     ).order_by('-product_modified_date', '-product_created_date')
     return render(request, 'finished_products.html', {'products': products})
 
 def unfinished_products_view(request):
     products = Product.objects.filter(
-        category__category_name__iexact="unfinished"
+        category__category_name__iexact="properties_for_sale"
     ).order_by('-product_modified_date', '-product_created_date')
     return render(request, 'unfinished_products.html', {'products': products})
 
 def new_products_view(request):
     products = Product.objects.filter(
-        category__category_name__iexact="new"
+        category__category_name__iexact="office_spaces"
     ).order_by('-product_modified_date', '-product_created_date')
     return render(request, 'new_products.html', {'products': products})
 
