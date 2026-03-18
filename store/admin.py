@@ -38,7 +38,32 @@ class ProductImageInline(nested_admin.NestedTabularInline):
         return extra
     
 
+from django import forms
+from django.utils.text import slugify
+from .models import Product
+
+
+class ProductAdminForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+    def clean_product_slug(self):
+        slug = self.cleaned_data.get('product_slug')
+        name = self.cleaned_data.get('product_name')
+
+        base_slug = slugify(slug if slug else name)
+        new_slug = base_slug
+        counter = 1
+
+        while Product.objects.filter(product_slug=new_slug).exclude(pk=self.instance.pk).exists():
+            new_slug = f"{base_slug}-{counter}"
+            counter += 1
+
+        return new_slug
+
 class ProductAdmin(nested_admin.NestedModelAdmin):
+    form = ProductAdminForm
     prepopulated_fields = {'product_slug': ('product_name',)}
     list_display = (
         'product_name','likes_count','product_phone', 'category', 'display_sizes'  

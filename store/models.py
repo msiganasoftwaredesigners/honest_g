@@ -13,6 +13,7 @@ from users.models import CustomUser
 from django.db.models import Avg
 from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
+from django.utils.text import slugify
 
 
 class VariationManager(models.Manager):
@@ -38,7 +39,7 @@ class Color(models.Model):
     
 
 class Product(models.Model):
-    product_name = models.CharField(max_length=150, unique=True)
+    product_name = models.CharField(max_length=150)
     product_brand = models.CharField(max_length=150, blank=True,default='Custom')
     product_location = models.CharField(max_length=255,blank=True, null=True)
     product_slug = models.SlugField(max_length=150, unique=True)
@@ -69,12 +70,22 @@ class Product(models.Model):
     
     def save(self, *args, **kwargs):
         print("Product is being saved. Current views count is", self.product_views_count)
+        if not self.product_slug:
+            base_slug = slugify(self.product_name)
+            slug = base_slug
+            counter = 1
+
+            while Product.objects.filter(product_slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.product_slug = slug
         super().save(*args, **kwargs)
 
-    def validate_unique(self, exclude=None):
-        super().validate_unique(exclude)
-        if Product.objects.filter(product_name=self.product_name).exclude(id=self.id).exists():
-            raise ValidationError({'product_name': ('Product with this name already exists.')})
+    # def validate_unique(self, exclude=None):
+    #     super().validate_unique(exclude)
+    #     if Product.objects.filter(product_name=self.product_name).exclude(id=self.id).exists():
+    #         raise ValidationError({'product_name': ('Product with this name already exists.')})
         
     def get_store_url(self):
         if self.category and self.category.category_slug and self.product_slug:
