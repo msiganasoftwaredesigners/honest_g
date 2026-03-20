@@ -20,29 +20,31 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         try:
-            # is the object in the database yet?
             this = Post.objects.get(id=self.id)
             if this.image != self.image:
                 this.image.delete(save=False)
-        except: pass # when new photo then we do nothing, normal case
+        except Post.DoesNotExist:
+             pass
 
         self.slug = slugify(self.title)
+
         if self.content:
-            # Set the short_description as the first 200 characters of the content
             plain_text_content = html.unescape(strip_tags(str(self.content.html)))
             self.short_description = plain_text_content[:150]
-
 
         # Optimize image before saving
         if self.image:
             img = Image.open(self.image)
-            output = BytesIO()
 
-            # Save the image in its original format
-            img_format = img.format
-            img.save(output, format=img_format, quality=75)
+            if img.mode in ("RGBA", "P"):
+                img = img.convert("RGB")
+
+            output = BytesIO()
+            img.save(output, format="JPEG", quality=75)
             output.seek(0)
-            self.image = ContentFile(output.read(), self.image.name)
+
+            file_name = self.image.name.split('.')[0] + ".jpg"
+            self.image = ContentFile(output.read(), file_name)
 
         super().save(*args, **kwargs)
 
