@@ -55,7 +55,7 @@ def contact_us(request):
             f"Hello {name},\n\n"
             "Thank you for reaching out to us. We have received your message and will get back to you within 24 hours.\n\n"
             "Best regards,\n"
-            "The Samia Team"
+            "The Honest Gt Team"
         )
         send_mail(
             user_subject,

@@ -8,7 +8,7 @@ from django.core.files.base import ContentFile
 from io import BytesIO 
 import os
 from django_quill.fields import QuillField
-from category.models import Category
+from category.models import Category, ParkingSpace, Condition, Bedroom, Bathroom, Kitchen
 from users.models import CustomUser
 from django.db.models import Avg
 from django.db.models.signals import post_delete, pre_save
@@ -47,6 +47,11 @@ class Product(models.Model):
     product_stock = models.IntegerField(blank=True, null=True)
     product_is_available = models.BooleanField(default=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
+    parking_space = models.ForeignKey(ParkingSpace, on_delete=models.SET_NULL, blank=True, null=True)
+    condition = models.ForeignKey(Condition, on_delete=models.SET_NULL, blank=True, null=True)
+    bedroom = models.ForeignKey(Bedroom, on_delete=models.SET_NULL, blank=True, null=True)
+    bathroom = models.ForeignKey(Bathroom, on_delete=models.SET_NULL, blank=True, null=True)
+    kitchen = models.ForeignKey(Kitchen, on_delete=models.SET_NULL, blank=True, null=True)
     product_created_date = models.DateTimeField(auto_now_add=True)
     product_modified_date = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(CustomUser, through="Like", related_name="liked_products")

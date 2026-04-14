@@ -158,10 +158,27 @@ function slideImages(direction) {
                  <p class="space-x-0 md:space-x-2">
                     
                     <span class="text-sm md:text-base text-gray-800 font-semibold">Sq.meter: </span>
-                    {% comment %} {% load kare_filters %} {% endcomment %}
+                  
                       {% load price_filters %}
                 <span id="product-kare" class="text-gray-500 text-base ">Loading ... birr</span>
                 </p>
+                  <p class="space-x-0 md:space-x-2">
+                    
+                    <span class="text-sm md:text-base text-gray-800 font-semibold">Parking Space: </span>
+                  
+                     
+                <span class="text-gray-500 text-base ">{{single_product.parking_space}}</span
+                </p>
+                    <p class="space-x-0 md:space-x-2">
+                        
+                        <span class="text-sm md:text-base text-gray-800 font-semibold">Condition: </span>
+                        <span class="text-gray-500 text-base ">{{single_product.condition}}</span>
+                    </p>
+                    <p class="space-x-0 md:space-x-2">
+                        <span class="text-sm md:text-base text-gray-800 font-semibold">Kitchen: </span>
+                        <span class="text-gray-500 text-base ">{{single_product.kitchen}}</span>
+                    </p>
+                  
             </div>
         </div>
         <div class="w-1/2">
@@ -191,6 +208,14 @@ function slideImages(direction) {
     </div>
 </div>
 {% endif %}
+  <p class="space-x-0 md:space-x-2">
+                        <span class="text-sm md:text-base text-gray-800 font-semibold">Bedroom: </span>
+                        <span class="text-gray-500 text-base ">{{single_product.bedroom}}</span>
+                    </p>
+                    <p class="space-x-0 md:space-x-2">
+                        <span class="text-sm md:text-base text-gray-800 font-semibold">Bathroom: </span>
+                        <span class="text-gray-500 text-base ">{{single_product.bathroom}}</span>
+                    </p>
 
 </div>
 </div> 
@@ -211,17 +236,18 @@ function slideImages(direction) {
                 </a>
             </div>
             <div class="flex space-x-12 mt-4 justify-center md:justify-start item-center text-center">
-                <a href="{{ single_product.product_owner.facebook_url }}" target="_blank"
+                <a href="https://wa.me/251911145825" target="_blank"
                     class="border-slate-800 h-12 w-12  hover:bg-slate-400 rounded-full border  flex items-center justify-center">
-                    <i class="fab fa-facebook-f text-2xl text-blue-600"></i>
+                    <i class="fab fa-whatsapp text-2xl text-green-500"></i>
                 </a>
-                <a href="{{ single_product.product_owner.telegram_url }}" target="_blank"
+                <a href="https://t.me/honestg12" target="_blank"
                     class="border-slate-800 h-12 w-12 hover:bg-slate-400 rounded-full border flex items-center justify-center">
                     <i class="fab fa-telegram text-2xl text-blue-600"></i>
                 </a>
-                <a href="{{ single_product.product_owner.whatsapp_url }}" target="_blank"
+                <a href="sms:+251911145825" target="_blank"
+
                     class="border-slate-800 h-12 w-12 hover:bg-slate-400 rounded-full border  flex items-center justify-center">
-                    <i class="fab fa-whatsapp text-2xl text-bold text-green-700"></i>
+                    <i class="fa-solid fa-comment-sms text-2xl text-bold text-green-700"></i>
                 </a>
             </div>
         </div>

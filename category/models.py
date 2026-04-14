@@ -39,3 +39,59 @@ class Category(models.Model):
         except Exception as e:
             print(f"Unexpected error occurred while deleting the image file: {e}")
         super().delete(*args, **kwargs)
+
+
+class ParkingSpace(models.Model):
+    parking_name = models.CharField(max_length=50, unique=True,default='No Parking Space')
+    parking_slug = models.SlugField(max_length=100, unique=100)
+
+    class Meta:
+        verbose_name = 'parking space'
+        verbose_name_plural = 'parking spaces'
+    
+    def __str__(self):
+        return self.parking_name
+# condition of home class
+class Condition(models.Model):
+    condition_name = models.CharField(max_length=50, unique=True,default='No Condition')
+    condition_slug = models.SlugField(max_length=100, unique=100)
+
+    class Meta:
+        verbose_name = 'condition'
+        verbose_name_plural = 'conditions'
+    
+    def __str__(self):
+        return self.condition_name
+# number of bedroom class
+class Bedroom(models.Model):
+    bedroom_name = models.CharField(max_length=50, unique=True,default='No Bedroom')
+    bedroom_slug = models.SlugField(max_length=100, unique=100)
+
+    class Meta:
+        verbose_name = 'bedroom'
+        verbose_name_plural = 'bedrooms'
+    
+    def __str__(self):
+        return self.bedroom_name
+# number of bathroom class
+class Bathroom(models.Model):
+    bathroom_name = models.CharField(max_length=50, unique=True,default='No Bathroom')
+    bathroom_slug = models.SlugField(max_length=100, unique=100)
+
+    class Meta:
+        verbose_name = 'bathroom'
+        verbose_name_plural = 'bathrooms'
+    
+    def __str__(self):
+        return self.bathroom_name
+# number of kitchen class
+class Kitchen(models.Model):
+    kitchen_name = models.CharField(max_length=50, unique=True,default='No Kitchen')
+    kitchen_slug = models.SlugField(max_length=100, unique=100)
+
+    class Meta:
+        verbose_name = 'kitchen'
+        verbose_name_plural = 'kitchens'
+    
+    def __str__(self):
+        return self.kitchen_name

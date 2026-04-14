@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
-from category.models import Category
+from category.models import Category, ParkingSpace, Condition, Bedroom, Bathroom, Kitchen
 from slideshow.models import BackgroundSlide
 from store.models import Product,Like
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -30,6 +30,12 @@ logger = logging.getLogger(__name__)
 
 def store(request, category_slug=None):
     categories = None
+    conditions = None
+    parking_spaces = None
+    bedrooms = None
+    bathrooms = None
+    kitchens = None
+
     products = None
     template = 'index.html'
 

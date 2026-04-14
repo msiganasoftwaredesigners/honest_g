@@ -1,5 +1,5 @@
 from django.contrib import admin
-from category.models import Category
+from category.models import Category, ParkingSpace, Condition, Bedroom, Bathroom, Kitchen
 from msigana_ecommerce.admin_site import admin_site
 # Register your models here.
 
@@ -16,3 +16,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 admin_site.register(Category, CategoryAdmin)
+admin_site.register(ParkingSpace, admin.ModelAdmin)
+admin_site.register(Condition, admin.ModelAdmin)
+admin_site.register(Bedroom, admin.ModelAdmin)
+admin_site.register(Bathroom, admin.ModelAdmin)
+admin_site.register(Kitchen, admin.ModelAdmin)
