@@ -247,7 +247,6 @@ EMAIL_USE_TLS = False
 EMAIL_HOST_USER = 'info@honestgt.com'  
 EMAIL_HOST_PASSWORD = 'Honestgt11@#'  
 DEFAULT_FROM_EMAIL = 'info@honestgt.com'  
-ADMIN_EMAIL = 'info@honestgt.com'  
 
 
 RECAPTCHA_PUBLIC_KEY='hsfjksdhf78s5kdjf8r53nth895ghn54'

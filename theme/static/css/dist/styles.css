@@ -2423,6 +2423,11 @@ select{
   background-color: rgb(30 64 175 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-blue-900:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 58 138 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-gray-100:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
@@ -2600,10 +2605,6 @@ select{
     display: block;
   }
 
-  .sm\:inline{
-    display: inline;
-  }
-
   .sm\:flex{
     display: flex;
   }
@@ -2653,11 +2654,6 @@ select{
     padding-right: 0px;
   }
 
-  .sm\:px-10{
-    padding-left: 2.5rem;
-    padding-right: 2.5rem;
-  }
-
   .sm\:px-4{
     padding-left: 1rem;
     padding-right: 1rem;
@@ -2671,11 +2667,6 @@ select{
   .sm\:px-\[30px\]{
     padding-left: 30px;
     padding-right: 30px;
-  }
-
-  .sm\:py-12{
-    padding-top: 3rem;
-    padding-bottom: 3rem;
   }
 
   .sm\:text-4xl{
@@ -2875,10 +2866,6 @@ select{
     padding: 1.5rem;
   }
 
-  .md\:p-\[60px\]{
-    padding: 60px;
-  }
-
   .md\:px-0{
     padding-left: 0px;
     padding-right: 0px;
@@ -2986,10 +2973,6 @@ select{
     font-size: 0.875rem;
     line-height: 1.25rem;
   }
-
-  .md\:leading-\[1\.42\]{
-    line-height: 1.42;
-  }
 }
 
 @media (min-width: 1024px){
@@ -3092,15 +3075,6 @@ select{
     flex-direction: row;
   }
 
-  .lg\:p-10{
-    padding: 2.5rem;
-  }
-
-  .lg\:px-10{
-    padding-left: 2.5rem;
-    padding-right: 2.5rem;
-  }
-
   .lg\:px-16{
     padding-left: 4rem;
     padding-right: 4rem;
@@ -3114,11 +3088,6 @@ select{
   .lg\:px-32{
     padding-left: 8rem;
     padding-right: 8rem;
-  }
-
-  .lg\:py-12{
-    padding-top: 3rem;
-    padding-bottom: 3rem;
   }
 
   .lg\:pb-\[70px\]{
@@ -3301,10 +3270,6 @@ select{
     gap: 0.75rem;
   }
 
-  .\32xl\:p-\[60px\]{
-    padding: 60px;
-  }
-
   .\32xl\:px-64{
     padding-left: 16rem;
     padding-right: 16rem;
@@ -3333,20 +3298,9 @@ select{
 }
 
 @media (prefers-color-scheme: dark){
-  .dark\:text-slate-600{
-    --tw-text-opacity: 1;
-    color: rgb(71 85 105 / var(--tw-text-opacity));
-  }
-
   .dark\:text-white{
     --tw-text-opacity: 1;
     color: rgb(255 255 255 / var(--tw-text-opacity));
-  }
-
-  .dark\:shadow-lg{
-    --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   }
 
   .dark\:shadow-none{
