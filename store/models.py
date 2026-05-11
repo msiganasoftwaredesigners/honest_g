@@ -1,3 +1,4 @@
+import uuid
 # models.py
 from django.db import models
 from django.urls import reverse
@@ -185,7 +186,12 @@ class ProductImage(models.Model):
 
             output.seek(0)
 
-            self.image = ContentFile(output.read(), self.image.name)
+
+            extension = os.path.splitext(self.image.name)[1]
+
+            safe_filename = f"{uuid.uuid4()}{extension}"
+
+            self.image = ContentFile(output.read(),name=safe_filename)
 
         super().save(*args, **kwargs)
 
