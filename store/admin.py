@@ -52,10 +52,12 @@ class ProductAdminForm(forms.ModelForm):
         slug = self.cleaned_data.get('product_slug')
         name = self.cleaned_data.get('product_name')
 
-        base_slug = slugify(slug if slug else name)
+        # Add allow_unicode=True here as well
+        base_slug = slugify(slug if slug else name, allow_unicode=True)
         new_slug = base_slug
         counter = 1
 
+        # Check for uniqueness, excluding the current instance
         while Product.objects.filter(product_slug=new_slug).exclude(pk=self.instance.pk).exists():
             new_slug = f"{base_slug}-{counter}"
             counter += 1

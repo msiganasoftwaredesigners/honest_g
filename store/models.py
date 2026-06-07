@@ -77,7 +77,8 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         print("Product is being saved. Current views count is", self.product_views_count)
         if not self.product_slug:
-            base_slug = slugify(self.product_name)
+            # Add allow_unicode=True here
+            base_slug = slugify(self.product_name, allow_unicode=True)
             slug = base_slug
             counter = 1
 
