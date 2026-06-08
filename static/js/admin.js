@@ -24,4 +24,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
       checkbox.checked = false;
     }
   });
+
+   const nameField = document.querySelector("#id_product_name");
+   const slugField = document.querySelector("#id_product_slug");
+
+   if (nameField && slugField) {
+     nameField.addEventListener("input", function () {
+       // Only auto-fill if the slug field is currently empty
+       if (slugField.value === "") {
+         // A simple conversion: replace spaces with hyphens
+         // This is a basic approach; the backend will clean it during save()
+         slugField.value = nameField.value.trim().replace(/\s+/g, "-");
+       }
+     });
+   }
 });
+
+

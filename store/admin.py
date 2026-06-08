@@ -43,7 +43,14 @@ from django.utils.text import slugify
 from .models import Product
 
 
+from django import forms
+from django.utils.text import slugify
+from .models import Product
+
 class ProductAdminForm(forms.ModelForm):
+    # Explicitly redefine the field to allow unicode
+    product_slug = forms.SlugField(allow_unicode=True, required=False)
+
     class Meta:
         model = Product
         fields = '__all__'
@@ -52,7 +59,7 @@ class ProductAdminForm(forms.ModelForm):
         slug = self.cleaned_data.get('product_slug')
         name = self.cleaned_data.get('product_name')
 
-        # Add allow_unicode=True here as well
+        # Use allow_unicode=True here to generate the slug if it's blank
         base_slug = slugify(slug if slug else name, allow_unicode=True)
         new_slug = base_slug
         counter = 1
@@ -66,7 +73,14 @@ class ProductAdminForm(forms.ModelForm):
 
 class ProductAdmin(nested_admin.NestedModelAdmin):
     form = ProductAdminForm
-    prepopulated_fields = {'product_slug': ('product_name',)}
+    def clean_product_slug(self):
+        slug = self.cleaned_data.get('product_slug')
+        name = self.cleaned_data.get('product_name')
+
+        if not slug:
+            slug = slugify(name, allow_unicode=True)
+
+        return slug
     list_display = (
         'product_name','likes_count','product_phone', 'category', 'display_sizes'  
     )
