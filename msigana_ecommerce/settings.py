@@ -95,6 +95,10 @@ DATABASES = {
         'PORT': 3306,
         'USER': 'honestma_honest_user',
         'PASSWORD': 'Honest11#@',
+        
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        },
     }
 }
 
