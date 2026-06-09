@@ -286,7 +286,7 @@ Honest G provides high-quality office rentals, commercial sales, and residential
 
             <a href="{{ product.get_store_url }}" 
                class="block w-full text-center bg-slate-800 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors duration-300 text-sm shadow-md">
-               View Details
+               View Details 
             </a>
         </div>
     </div>
@@ -767,13 +767,13 @@ Honest G provides high-quality office rentals, commercial sales, and residential
                     card.className = "flex flex-col";
                     card.innerHTML = `
                       <div class="m-2 bg-white shadow-md rounded-lg overflow-hidden flex-grow">
-                        <a href="${product.get_store_url}">
+                        <a href="/homes/${product.category_slug}/${product.product_slug}/">
                           <div class="w-full sm:h-32 md:h-64 overflow-hidden">
                             <img class="w-full h-full object-cover" src="${product.product_images}" alt="${product.product_name}">
                           </div>
                         </a>
                         <div class="sm:p-3 md:p-6">
-                          <a href="${product.get_store_url}" class="block text-lg font-semibold text-gray-800 hover:text-blue-600">${product.product_name}</a>
+                          <a href="/homes/${product.category_slug}/${product.product_slug}/" class="block text-lg font-semibold text-gray-800 hover:text-blue-600">${product.product_name}</a>
                           <div class="my-2 md:my-4 text-blue-600 md:text-2xl">${product.product_price} birr</div>
                         </div>
                       </div>

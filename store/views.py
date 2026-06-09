@@ -67,7 +67,19 @@ def store(request, category_slug=None):
         products_page = paginator.page(paginator.num_pages)
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        data = {"products": list(products_page), "end": False}
+        data = {
+            "products": [
+                {
+                    "product_name": p.product_name,
+                    "product_slug": p.product_slug,
+                    "category_slug": p.category.category_slug,
+                    "image": p.get_main_image().image.url if p.get_main_image() else "",
+                    "price": str(p.default_price or ""),
+                }
+                for p in products_page
+            ],
+            "end": False
+        }
         return JsonResponse(data, safe=False)
 
     # Your existing code
